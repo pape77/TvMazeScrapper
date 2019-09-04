@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.9.1" />
+      <PackageReference Include="Rtl.Configuration.Validation" Version="1.3.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TvMazeScrapperDp.Core\TvMazeScrapperDp.Core.csproj" />
+    </ItemGroup>
+
+</Project>
