@@ -40,7 +40,12 @@ namespace TvMazeScrapperDP.Api.Controllers
         {
             var maybeShow = await _showsService.GetShowAsync(id, cancellationToken);
 
-            return maybeShow.HasValue ? (IActionResult)Ok(maybeShow.Value) : NotFound();
+            if (maybeShow.HasNoValue)
+            {
+                return NotFound();
+            }
+
+            return Ok(maybeShow.Value);
         }
     }
 }

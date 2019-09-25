@@ -36,7 +36,7 @@ namespace TvMazeScrapperDP.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
             var tvMazeClientConfig = _configuration.GetConfig<TvMazeClientConfig>("TvMazeClient");
 
             services
@@ -64,12 +64,18 @@ namespace TvMazeScrapperDP.Api
                 .AddMongoDb(_configuration["MongoDb:ConnectionString"], _configuration["MongoDb:Database"], "MongoDb");
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHealthChecks((PathString)"/health",
                 new HealthCheckOptions {ResponseWriter = ResponseWriters.ResponseWriters.WriteFullJsonReportAsync});
 
-            app.UseMvc();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         private IAsyncPolicy<HttpResponseMessage> GetHttpPolicies()
