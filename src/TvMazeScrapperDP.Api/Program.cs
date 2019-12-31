@@ -12,14 +12,11 @@ namespace TvMazeScrapperDP.Api
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseSerilog(ConfigureSerilog);
-                });
+            return WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseSerilog(ConfigureSerilog);
         }
 
         private static void ConfigureSerilog(WebHostBuilderContext ctx, LoggerConfiguration loggerConfiguration) =>
