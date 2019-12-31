@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NodaTime;
 using Polly;
 using Polly.Extensions.Http;
@@ -71,11 +70,7 @@ namespace TvMazeScrapperDP.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(builder => builder.MapControllers());
         }
 
         private IAsyncPolicy<HttpResponseMessage> GetHttpPolicies()

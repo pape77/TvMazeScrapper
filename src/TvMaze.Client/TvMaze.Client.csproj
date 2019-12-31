@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Refit" Version="4.7.51" />
-      <PackageReference Include="Refit.HttpClientFactory" Version="4.7.51" />
+      <PackageReference Include="Refit" Version="5.0.23" />
+      <PackageReference Include="Refit.HttpClientFactory" Version="5.0.23" />
     </ItemGroup>
 
 </Project>
