@@ -1,10 +1,9 @@
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
 
 namespace TvMazeScrapperDP.Api.ResponseWriters
 {
@@ -14,14 +13,16 @@ namespace TvMazeScrapperDP.Api.ResponseWriters
             HttpContext httpContext,
             HealthReport healthReport)
         {
-            var text = JsonConvert.SerializeObject(CreateReport(healthReport));
+            var bytes = JsonSerializer.SerializeToUtf8Bytes(CreateReport(healthReport));
+            var text = Encoding.Default.GetString(bytes);
+            
             httpContext.Response.ContentType = "application/json";
-            await httpContext.Response.WriteAsync(text, Encoding.UTF8, new CancellationToken());
+            await httpContext.Response.WriteAsync(text, Encoding.UTF8);
         }
 
         private static Report CreateReport(HealthReport healthReport)
         {
-            return new Report()
+            return new Report
             {
                 Status = healthReport.Status,
                 Checks = healthReport.Entries.Select(x => new ReportEntry()

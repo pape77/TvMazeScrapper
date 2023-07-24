@@ -54,8 +54,8 @@ namespace Tv.MazeScrapperDP.Core.Tests.Services
 
             var result = await _showService.GetShowAsync(id, CancellationToken.None);
 
-            Assert.True(result.HasValue);
-            Assert.Equal(result.Value, _show);
+            Assert.NotNull(result);
+            Assert.Equal(result!, _show);
             _showRepositoryMock.Verify(srm => srm.FindAsync(id, CancellationToken.None), Times.Once);
             _showRepositoryMock.VerifyNoOtherCalls();
         }
@@ -65,7 +65,7 @@ namespace Tv.MazeScrapperDP.Core.Tests.Services
         {
             var result = await _showService.GetShowAsync(100, CancellationToken.None);
 
-            Assert.True(result.HasNoValue);
+            Assert.Null(result);
             _showRepositoryMock.Verify(srm => srm.FindAsync(100, CancellationToken.None), Times.Once);
             _showRepositoryMock.VerifyNoOtherCalls();
         }

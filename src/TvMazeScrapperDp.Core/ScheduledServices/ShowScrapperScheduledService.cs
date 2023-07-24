@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using NCrontab;
 using NodaTime;
 using TvMazeScrapperDp.Core.Models;
+using TvMazeScrapperDp.Core.Options;
 using TvMazeScrapperDp.Core.Services.Contracts;
 
 namespace TvMazeScrapperDp.Core.ScheduledServices
@@ -16,18 +17,18 @@ namespace TvMazeScrapperDp.Core.ScheduledServices
         private DateTime _nextRun;
         private DateTime _now;
         private readonly CrontabSchedule _schedule;
-        private readonly ScheduleConfig _scheduleConfig;
+        private readonly ScheduleOptions _scheduleOptions;
         private readonly IClock _clock;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public ShowScrapperScheduledService(ILogger<ShowScrapperScheduledService> logger, IClock clock,
-            IOptions<ScheduleConfig> config, IServiceScopeFactory serviceScopeFactory) : base(logger)
+            IOptions<ScheduleOptions> config, IServiceScopeFactory serviceScopeFactory) : base(logger)
         {
-            _scheduleConfig = config.Value;
+            _scheduleOptions = config.Value;
             _clock = clock;
             _serviceScopeFactory = serviceScopeFactory;
 
-            _schedule = CrontabSchedule.Parse(_scheduleConfig.CronExpression);
+            _schedule = CrontabSchedule.Parse(_scheduleOptions.CronExpression);
             _nextRun = _clock.GetCurrentInstant().ToDateTimeUtc();
         }
 
@@ -48,6 +49,6 @@ namespace TvMazeScrapperDp.Core.ScheduledServices
             await Task.Delay(_nextRun - _now);
         }
 
-        public override Task OnErrorDelay() => Task.Delay(TimeSpan.FromSeconds(_scheduleConfig.OnErrorDelay));
+        public override Task OnErrorDelay() => Task.Delay(TimeSpan.FromSeconds(_scheduleOptions.OnErrorDelay));
     }
 }

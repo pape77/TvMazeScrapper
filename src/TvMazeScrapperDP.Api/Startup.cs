@@ -14,7 +14,10 @@ using Polly.Extensions.Http;
 using Rtl.Configuration.Validation;
 using TvMaze.Client;
 using TvMaze.Client.Models;
+using TvMaze.Client.Options;
+using TvMazeScrapperDp.Core.Extensions;
 using TvMazeScrapperDp.Core.Models;
+using TvMazeScrapperDp.Core.Options;
 using TvMazeScrapperDp.Core.ScheduledServices;
 using TvMazeScrapperDp.Core.Services;
 using TvMazeScrapperDp.Core.Services.Contracts;
@@ -35,28 +38,15 @@ namespace TvMazeScrapperDP.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
-            var tvMazeClientConfig = _configuration.GetConfig<TvMazeClientConfig>("TvMazeClient");
+            services.AddControllers();
+            var tvMazeClientConfig = _configuration.GetConfig<TvMazeClientOptions>("TvMazeClient");
 
-            services
-                .AddTvMazeClient(tvMazeClientConfig)
-                .AddPolicyHandler(GetHttpPolicies());
+            services.AddTvMazeClient(tvMazeClientConfig);
 
             services.AddMappings();
             services.AddSingleton<IClock>(SystemClock.Instance);
-            services.AddTransient<IShowService, ShowService>();
-            services.AddTransient<IShowCastProvider, ShowsCastProvider>();
-            services.AddTransient<IShowScrapperService, ShowScrapperService>();
             services.AddPersistence(_configuration);
-
-            services.AddSingleton<IShowContext, ShowContext>()
-                .AddSingleton<IShowRepository, ShowRepository>();
-
-            if (_configuration.GetValue<bool>("Scheduling:Enabled"))
-            {
-                services.AddConfig<ScheduleConfig>(_configuration, "Scheduling");
-                services.AddHostedService<ShowScrapperScheduledService>();
-            }
+            services.AddCore(opts => _configuration.Bind("Scheduling", opts));
 
             services.AddHealthChecks()
                 .AddUrlGroup(tvMazeClientConfig.BaseUri, "TvMazeSource")
@@ -71,17 +61,6 @@ namespace TvMazeScrapperDP.Api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(builder => builder.MapControllers());
-        }
-
-        private IAsyncPolicy<HttpResponseMessage> GetHttpPolicies()
-        {
-            var randomExtraWait = new Random();
-
-            return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .OrResult(r => r.StatusCode == HttpStatusCode.TooManyRequests)
-                .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
-                                                      + TimeSpan.FromMilliseconds(randomExtraWait.Next(0, 100)));
         }
     }
 }

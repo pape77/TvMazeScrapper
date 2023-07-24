@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
-using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TvMazeScrapperDP.Api.Controllers;
@@ -30,7 +29,7 @@ namespace TvMazeScrapperDP.Api.Tests.Controllers
             _showServiceMock = new Mock<IShowService>();
 
             _showServiceMock.Setup(ssm => ssm.GetShowAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Maybe<Show>.From(_expectedShow));
+                .ReturnsAsync(_expectedShow);
 
             _showServiceMock.Setup(ssm => ssm.GetAllPaginatedAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_expectedPaginatedResponse);
@@ -64,7 +63,7 @@ namespace TvMazeScrapperDP.Api.Tests.Controllers
         public async Task Test03()
         {
             _showServiceMock.Setup(ssm => ssm.GetShowAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Maybe<Show>.None);
+                .ReturnsAsync((Show)null);
 
             var result = await _showController.Get(1, CancellationToken.None);
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Rtl.Configuration.Validation;
 using TvMazeScrapperDp.Core.Mappings;
+using TvMazeScrapperDp.Core.Services.Contracts;
 using TvMazeScrapperDP.Persistance.MongoDb.Mapping;
 using TvMazeScrapperDP.Persistance.MongoDb.Model;
 using TvMazeScrapperDP.Persistance.MongoDb.Services;
@@ -25,7 +26,10 @@ namespace TvMazeScrapperDP.Persistance.MongoDb
                     .Create(provider.GetRequiredService<IOptions<MongoDbConfig>>().Value.ConnectionString))
                 .AddSingleton<IMongoDatabase>(provider => provider
                     .GetRequiredService<IMongoDbClient>()
-                    .GetDatabase(provider.GetRequiredService<IOptions<MongoDbConfig>>().Value.Database));
+                    .GetDatabase(provider.GetRequiredService<IOptions<MongoDbConfig>>().Value.Database))
+                .AddSingleton<IShowContext, ShowContext>()
+                .AddSingleton<IShowRepository, ShowRepository>();;
+            
         }
 
         public static IServiceCollection AddMappings(this IServiceCollection services)

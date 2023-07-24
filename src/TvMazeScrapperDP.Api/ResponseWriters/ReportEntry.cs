@@ -1,6 +1,5 @@
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace TvMazeScrapperDP.Api.ResponseWriters
 {
@@ -8,13 +7,14 @@ namespace TvMazeScrapperDP.Api.ResponseWriters
     {
         public string Name { get; set; }
 
-        [JsonConverter(typeof (StringEnumConverter))]
+        [JsonConverter(typeof (JsonStringEnumConverter))]
         public HealthStatus Status { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Exception { get; set; }
     }
 }

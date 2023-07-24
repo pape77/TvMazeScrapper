@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TvMaze.Client.Models
+namespace TvMaze.Client.Options
 {
-    public class TvMazeClientConfig
+    public class TvMazeClientOptions
     {
         [Required]
         public Uri BaseUri { get; set; }

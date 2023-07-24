@@ -22,6 +22,18 @@ http://localhost:YOUR_PORT/health
 
 to check the health status of the API. Must be healthy in order to run correctly.
 
+You can fetch shows calling the endpoint specifying a page number and size:
+
+```
+https://localhost:YOUR_PORT/api/shows?page={page_number}&pageSize={page_size}
+```
+
+You can fetch a particular show like this (some shows don't have a cast in the origin):
+
+```
+https://localhost:YOUR_PORT/api/shows/{show_id}
+```
+
 ## Show index
 ```
 http://www.tvmaze.com/api#show-index

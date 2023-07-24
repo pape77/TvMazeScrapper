@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TvMazeScrapperDp.Core.Models
+namespace TvMazeScrapperDp.Core.Options
 {
-    public class ScheduleConfig
+    public class ScheduleOptions
     {
         [Required]
         public string CronExpression { get; set; }
