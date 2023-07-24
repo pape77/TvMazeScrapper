@@ -38,7 +38,7 @@ namespace Tv.MazeScrapperDP.Core.Tests.Services
 
             _tvMazeClientMock = new Mock<ITvMazeClient>();
             _tvMazeClientMock.Setup(tvmcm => tvmcm.GetCastAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ApiResponse<IEnumerable<CastFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), castList));
+                .ReturnsAsync(new ApiResponse<IEnumerable<CastFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), castList, new RefitSettings()));
 
             _mapperMock = new Mock<IMapper>();
             _mapperMock.SetupSequence(m => m.Map<Cast>(It.IsAny<Person>()))
@@ -75,7 +75,7 @@ namespace Tv.MazeScrapperDP.Core.Tests.Services
         public async Task Test02()
         {
             _tvMazeClientMock.Setup(tvmcm => tvmcm.GetCastAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ApiResponse<IEnumerable<CastFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), null));
+                .ReturnsAsync(new ApiResponse<IEnumerable<CastFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), null, new RefitSettings()));
 
             var resultshow = await _showsCastProvider.FillInShowCastAsync(_inputShow, CancellationToken.None);
 

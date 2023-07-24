@@ -35,9 +35,9 @@ namespace Tv.MazeScrapperDP.Core.Tests.Services
 
             _tvMazeClientMock = new Mock<ITvMazeClient>();
             _tvMazeClientMock.Setup(tvmc => tvmc.GetShowsAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ApiResponse<IEnumerable<ShowFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), shows));
+                .ReturnsAsync(new ApiResponse<IEnumerable<ShowFromClient>>(new HttpResponseMessage(HttpStatusCode.OK), shows, new RefitSettings()));
             _tvMazeClientMock.Setup(tvmcm => tvmcm.GetShowsAsync(2, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ApiResponse<IEnumerable<ShowFromClient>>(new HttpResponseMessage(HttpStatusCode.NotFound), null));
+                .ReturnsAsync(new ApiResponse<IEnumerable<ShowFromClient>>(new HttpResponseMessage(HttpStatusCode.NotFound), null, new RefitSettings()));
 
             _showCastProviderMock = new Mock<IShowCastProvider>();
 
